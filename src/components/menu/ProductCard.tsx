@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Plus, Check, Star } from 'lucide-react';
+import { Plus, Star, Clock } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Product } from '@/types';
 import { Badge } from '@/components/ui/Badge';
@@ -15,7 +15,6 @@ interface ProductCardProps {
 
 export function ProductCard({ product, layout = 'grid' }: ProductCardProps) {
   const [added, setAdded] = useState(false);
-  const [hovered, setHovered] = useState(false);
   const { addItem } = useCartStore();
 
   const handleAdd = () => {
@@ -30,8 +29,7 @@ export function ProductCard({ product, layout = 'grid' }: ProductCardProps) {
         layout
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex gap-4 rounded-2xl p-3 sm:p-4 transition-all"
-        style={{ backgroundColor: '#141414', border: '1px solid rgba(255,255,255,0.06)' }}
+        className="flex gap-4 bg-white dark:bg-gray-800 rounded-2xl p-3 sm:p-4 shadow-sm hover:shadow-md transition-all border border-gray-100 dark:border-gray-700"
       >
         <div className="relative flex-shrink-0">
           <img
@@ -40,33 +38,46 @@ export function ProductCard({ product, layout = 'grid' }: ProductCardProps) {
             className="w-24 h-24 sm:w-28 sm:h-28 rounded-xl object-cover"
           />
           {!product.available && (
-            <div className="absolute inset-0 bg-black/60 rounded-xl flex items-center justify-center">
+            <div className="absolute inset-0 bg-black/50 rounded-xl flex items-center justify-center">
               <span className="text-white text-xs font-bold">No disponible</span>
             </div>
           )}
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex flex-wrap gap-1 mb-1">
-            {product.tags.slice(0, 2).map((tag) => <Badge key={tag} tag={tag} />)}
+            {product.tags.slice(0, 2).map((tag) => (
+              <Badge key={tag} tag={tag} />
+            ))}
           </div>
-          <h3 className="font-display font-semibold text-white text-sm sm:text-base truncate">{product.name}</h3>
-          <p className="text-xs sm:text-sm mt-0.5 line-clamp-2" style={{ color: 'rgba(255,255,255,0.4)' }}>
+          <h3 className="font-bold text-gray-900 dark:text-white text-sm sm:text-base truncate">
+            {product.name}
+          </h3>
+          <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-0.5 line-clamp-2">
             {product.description}
           </p>
-          <div className="flex items-center justify-between mt-3">
-            <span className="font-bold text-base sm:text-lg" style={{ color: '#FF6B35' }}>
-              {formatPrice(product.price)}
-            </span>
-            <motion.button
-              whileTap={{ scale: 0.92 }}
+          <div className="flex items-center justify-between mt-2">
+            <div>
+              <span className="font-black text-orange-500 text-base sm:text-lg">
+                {formatPrice(product.price)}
+              </span>
+              {product.originalPrice && (
+                <span className="text-xs text-gray-400 line-through ml-1.5">
+                  {formatPrice(product.originalPrice)}
+                </span>
+              )}
+            </div>
+            <button
               onClick={handleAdd}
               disabled={!product.available}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-semibold text-white transition-all disabled:opacity-40"
-              style={{ backgroundColor: added ? '#22c55e' : '#FF6B35' }}
+              className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all ${
+                added
+                  ? 'bg-green-500 text-white'
+                  : 'bg-orange-500 hover:bg-orange-600 text-white shadow-md shadow-orange-500/20'
+              } disabled:opacity-50 disabled:cursor-not-allowed active:scale-95`}
             >
-              {added ? <Check className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
-              {added ? '¡Listo!' : 'Agregar'}
-            </motion.button>
+              <Plus className="w-3.5 h-3.5" />
+              {added ? '¡Agregado!' : 'Agregar'}
+            </button>
           </div>
         </div>
       </motion.div>
@@ -75,119 +86,82 @@ export function ProductCard({ product, layout = 'grid' }: ProductCardProps) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-60px' }}
-      transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-      onHoverStart={() => setHovered(true)}
-      onHoverEnd={() => setHovered(false)}
-      className="relative rounded-2xl overflow-hidden flex flex-col"
-      style={{
-        backgroundColor: '#141414',
-        border: '1px solid rgba(255,255,255,0.06)',
-        transition: 'border-color 0.3s',
-        ...(hovered ? { borderColor: 'rgba(255,255,255,0.12)' } : {}),
-      }}
+      layout
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      whileHover={{ y: -4 }}
+      className="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-gray-700 flex flex-col"
     >
-      {/* Image container */}
-      <div className="relative overflow-hidden" style={{ aspectRatio: '4/3' }}>
+      <div className="relative overflow-hidden">
         <img
           src={product.image}
           alt={product.name}
-          className="w-full h-full object-cover"
-          style={{
-            transition: 'transform 0.6s cubic-bezier(0.22, 1, 0.36, 1)',
-            transform: hovered ? 'scale(1.07)' : 'scale(1)',
-          }}
+          className="w-full h-44 object-cover transition-transform duration-500 hover:scale-105"
         />
-
-        {/* Bottom gradient */}
-        <div
-          className="absolute inset-0"
-          style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%)' }}
-        />
-
-        {/* Tags */}
-        <div className="absolute top-3 left-3 flex flex-col gap-1">
-          {product.tags.slice(0, 2).map((tag) => <Badge key={tag} tag={tag} />)}
+        {!product.available && (
+          <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+            <span className="text-white text-sm font-bold bg-black/60 px-3 py-1 rounded-full">No disponible</span>
+          </div>
+        )}
+        {/* Tags overlay */}
+        <div className="absolute top-2.5 left-2.5 flex flex-col gap-1">
+          {product.tags.slice(0, 2).map((tag) => (
+            <Badge key={tag} tag={tag} />
+          ))}
         </div>
-
-        {/* Discount badge */}
         {product.originalPrice && (
-          <div className="absolute top-3 right-3">
-            <span
-              className="text-white text-xs font-black px-2 py-1 rounded-lg"
-              style={{ backgroundColor: '#ef4444' }}
-            >
+          <div className="absolute top-2.5 right-2.5">
+            <span className="bg-red-500 text-white text-xs font-black px-2 py-1 rounded-lg">
               -{Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}%
             </span>
           </div>
         )}
-
-        {/* Hover overlay */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: hovered && product.available ? 1 : 0 }}
-          transition={{ duration: 0.2 }}
-          className="absolute inset-0 flex items-center justify-center"
-          style={{ backgroundColor: 'rgba(0,0,0,0.45)' }}
-        >
-          <motion.button
-            initial={{ scale: 0.85, opacity: 0 }}
-            animate={{ scale: hovered ? 1 : 0.85, opacity: hovered ? 1 : 0 }}
-            transition={{ duration: 0.2 }}
-            onClick={handleAdd}
-            className="flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-white text-sm"
-            style={{ backgroundColor: added ? '#22c55e' : '#FF6B35' }}
-          >
-            {added ? <Check className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
-            {added ? '¡Agregado!' : 'Agregar al pedido'}
-          </motion.button>
-        </motion.div>
       </div>
 
-      {/* Content */}
       <div className="p-4 flex flex-col flex-1">
-        <div className="flex items-start justify-between gap-2 mb-1.5">
-          <h3 className="font-display font-semibold text-white text-sm leading-snug line-clamp-1 flex-1">
+        <div className="flex items-center justify-between mb-1">
+          <h3 className="font-bold text-gray-900 dark:text-white text-sm leading-tight line-clamp-1">
             {product.name}
           </h3>
           {product.rating && (
-            <div className="flex items-center gap-1 flex-shrink-0">
-              <Star className="w-3 h-3 fill-[#FFB800] text-[#FFB800]" />
-              <span className="text-xs font-semibold" style={{ color: 'rgba(255,255,255,0.5)' }}>
-                {product.rating}
-              </span>
+            <div className="flex items-center gap-0.5 flex-shrink-0 ml-2">
+              <Star className="w-3.5 h-3.5 text-yellow-400 fill-yellow-400" />
+              <span className="text-xs font-bold text-gray-700 dark:text-gray-300">{product.rating}</span>
             </div>
           )}
         </div>
 
-        <p className="text-xs line-clamp-2 flex-1 mb-3" style={{ color: 'rgba(255,255,255,0.35)' }}>
+        <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-2 flex-1 mb-3">
           {product.description}
         </p>
 
+        {product.prepTime && (
+          <div className="flex items-center gap-1 mb-3">
+            <Clock className="w-3 h-3 text-gray-400" />
+            <span className="text-xs text-gray-400">{product.prepTime}</span>
+          </div>
+        )}
+
         <div className="flex items-center justify-between mt-auto">
           <div>
-            <span className="font-bold text-lg" style={{ color: '#FF6B35' }}>
-              {formatPrice(product.price)}
-            </span>
+            <span className="font-black text-orange-500 text-lg">{formatPrice(product.price)}</span>
             {product.originalPrice && (
-              <span className="text-xs line-through ml-1.5" style={{ color: 'rgba(255,255,255,0.25)' }}>
+              <span className="text-xs text-gray-400 line-through ml-1.5">
                 {formatPrice(product.originalPrice)}
               </span>
             )}
           </div>
           <motion.button
-            whileTap={{ scale: 0.88 }}
+            whileTap={{ scale: 0.9 }}
             onClick={handleAdd}
             disabled={!product.available}
-            className="w-9 h-9 rounded-xl flex items-center justify-center transition-all disabled:opacity-40"
-            style={{ backgroundColor: added ? '#22c55e' : '#FF6B35' }}
+            className={`w-9 h-9 rounded-xl flex items-center justify-center font-bold transition-all ${
+              added
+                ? 'bg-green-500 text-white'
+                : 'bg-orange-500 hover:bg-orange-600 text-white shadow-md shadow-orange-500/25'
+            } disabled:opacity-50 disabled:cursor-not-allowed`}
           >
-            {added
-              ? <Check className="w-4 h-4 text-white" />
-              : <Plus className="w-5 h-5 text-white" />
-            }
+            <Plus className={`w-5 h-5 transition-transform ${added ? 'rotate-45' : ''}`} />
           </motion.button>
         </div>
       </div>

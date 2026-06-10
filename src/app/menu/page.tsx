@@ -2,14 +2,12 @@
 
 import { useState, useMemo, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Search, X } from 'lucide-react';
+import { Search, Grid, List, SlidersHorizontal, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { products } from '@/data/products';
 import { categories } from '@/data/categories';
 import { ProductCard } from '@/components/menu/ProductCard';
 import type { ProductTag } from '@/types';
-
-type FilterTag = ProductTag | 'all';
 
 const tagFilters: { id: ProductTag; label: string }[] = [
   { id: 'popular', label: '🔥 Popular' },
@@ -26,7 +24,8 @@ function MenuContent() {
   const [search, setSearch] = useState('');
   const [activeCategory, setActiveCategory] = useState(initialCat);
   const [activeTags, setActiveTags] = useState<ProductTag[]>([]);
-  const [activeTagFilter, setActiveTagFilter] = useState<FilterTag>('all');
+  const [layout, setLayout] = useState<'grid' | 'list'>('grid');
+  const [showFilters, setShowFilters] = useState(false);
 
   const toggleTag = (tag: ProductTag) => {
     setActiveTags((prev) =>
@@ -49,170 +48,152 @@ function MenuContent() {
   const allCategories = [{ id: 'all', name: 'Todos', icon: '🍽️', order: -1 }, ...categories];
 
   return (
-    <div className="min-h-screen pt-20" style={{ backgroundColor: '#0A0A0A' }}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-8">
-        <div className="flex gap-8 py-8">
-
-          {/* LEFT SIDEBAR */}
-          <aside className="hidden lg:block w-56 flex-shrink-0">
-            <div className="sticky top-24">
-              <p
-                className="text-xs font-semibold uppercase tracking-widest mb-4"
-                style={{ color: 'rgba(255,255,255,0.3)' }}
-              >
-                Menú
-              </p>
-              <nav className="space-y-1">
-                {allCategories.map((cat) => (
-                  <button
-                    key={cat.id}
-                    onClick={() => setActiveCategory(cat.id)}
-                    className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-left"
-                    style={{
-                      borderLeft: activeCategory === cat.id ? '2px solid #FF6B35' : '2px solid transparent',
-                      backgroundColor: activeCategory === cat.id ? 'rgba(255,107,53,0.05)' : 'transparent',
-                      color: activeCategory === cat.id ? '#FF6B35' : 'rgba(255,255,255,0.4)',
-                      paddingLeft: '12px',
-                    }}
-                  >
-                    <span>{cat.icon}</span>
-                    <span>{cat.name}</span>
-                  </button>
-                ))}
-              </nav>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 pt-20">
+      {/* Header */}
+      <div className="bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 sticky top-16 sm:top-20 z-30">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          {/* Search + Layout */}
+          <div className="flex items-center gap-3 py-4">
+            <div className="flex-1 relative">
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Buscar platos, ingredientes..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full pl-10 pr-4 py-2.5 bg-gray-100 dark:bg-gray-800 border border-transparent focus:border-orange-400 focus:bg-white dark:focus:bg-gray-900 rounded-xl text-sm text-gray-900 dark:text-white placeholder-gray-400 outline-none transition-all"
+              />
+              {search && (
+                <button
+                  onClick={() => setSearch('')}
+                  className="absolute right-3 top-1/2 -translate-y-1/2"
+                >
+                  <X className="w-4 h-4 text-gray-400" />
+                </button>
+              )}
             </div>
-          </aside>
 
-          {/* MAIN CONTENT */}
-          <main className="flex-1 min-w-0">
-            {/* Sticky search bar */}
-            <div
-              className="sticky top-20 z-30 py-4 mb-6"
-              style={{ backgroundColor: 'rgba(10,10,10,0.9)', backdropFilter: 'blur(12px)' }}
+            <button
+              onClick={() => setShowFilters(!showFilters)}
+              className={`p-2.5 rounded-xl border transition-all ${
+                activeTags.length > 0
+                  ? 'bg-orange-500 border-orange-500 text-white'
+                  : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:border-orange-400'
+              }`}
             >
-              {/* Search input */}
-              <div className="relative mb-3">
-                <Search
-                  className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4"
-                  style={{ color: 'rgba(255,255,255,0.3)' }}
-                />
-                <input
-                  type="text"
-                  placeholder="Buscar platos, ingredientes..."
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm outline-none transition-all"
-                  style={{
-                    backgroundColor: '#1A1A1A',
-                    border: '1px solid rgba(255,255,255,0.06)',
-                    color: '#F5F5F0',
-                  }}
-                  onFocus={(e) => { e.currentTarget.style.borderColor = '#FF6B35'; }}
-                  onBlur={(e) => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'; }}
-                />
-                {search && (
-                  <button
-                    onClick={() => setSearch('')}
-                    className="absolute right-3 top-1/2 -translate-y-1/2"
-                  >
-                    <X className="w-4 h-4" style={{ color: 'rgba(255,255,255,0.4)' }} />
-                  </button>
-                )}
-              </div>
+              <SlidersHorizontal className="w-4 h-4" />
+            </button>
 
-              {/* Filter chips */}
-              <div className="flex gap-2 overflow-x-auto hide-scrollbar">
-                <button
-                  onClick={() => setActiveTags([])}
-                  className="flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold transition-all"
-                  style={{
-                    backgroundColor: activeTags.length === 0 ? '#FF6B35' : 'rgba(255,255,255,0.06)',
-                    color: activeTags.length === 0 ? '#fff' : 'rgba(255,255,255,0.5)',
-                  }}
-                >
-                  Todos
-                </button>
-                {tagFilters.map((f) => (
-                  <button
-                    key={f.id}
-                    onClick={() => toggleTag(f.id)}
-                    className="flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold transition-all"
-                    style={{
-                      backgroundColor: activeTags.includes(f.id) ? '#FF6B35' : 'rgba(255,255,255,0.06)',
-                      color: activeTags.includes(f.id) ? '#fff' : 'rgba(255,255,255,0.5)',
-                    }}
-                  >
-                    {f.label}
-                  </button>
-                ))}
-              </div>
-
-              {/* Mobile categories */}
-              <div className="flex gap-2 overflow-x-auto hide-scrollbar mt-3 lg:hidden">
-                {allCategories.map((cat) => (
-                  <button
-                    key={cat.id}
-                    onClick={() => setActiveCategory(cat.id)}
-                    className="flex items-center gap-1.5 px-3 py-2 rounded-xl whitespace-nowrap text-xs font-semibold transition-all flex-shrink-0"
-                    style={{
-                      backgroundColor: activeCategory === cat.id ? '#FF6B35' : 'rgba(255,255,255,0.06)',
-                      color: activeCategory === cat.id ? '#fff' : 'rgba(255,255,255,0.5)',
-                    }}
-                  >
-                    <span>{cat.icon}</span>
-                    <span>{cat.name}</span>
-                  </button>
-                ))}
-              </div>
+            <div className="hidden sm:flex border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden">
+              <button
+                onClick={() => setLayout('grid')}
+                className={`p-2.5 transition-all ${layout === 'grid' ? 'bg-orange-500 text-white' : 'text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800'}`}
+              >
+                <Grid className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => setLayout('list')}
+                className={`p-2.5 transition-all ${layout === 'list' ? 'bg-orange-500 text-white' : 'text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800'}`}
+              >
+                <List className="w-4 h-4" />
+              </button>
             </div>
+          </div>
 
-            {/* Results count */}
-            <div className="flex items-center justify-between mb-6">
-              <p className="text-sm" style={{ color: 'rgba(255,255,255,0.4)' }}>
-                <span className="font-bold text-white">{filteredProducts.length}</span>{' '}
-                {filteredProducts.length === 1 ? 'producto' : 'productos'}
-              </p>
-              {(search || activeTags.length > 0 || activeCategory !== 'all') && (
-                <button
-                  onClick={() => { setSearch(''); setActiveTags([]); setActiveCategory('all'); }}
-                  className="text-xs font-semibold flex items-center gap-1 transition-colors"
-                  style={{ color: '#FF6B35' }}
-                >
-                  <X className="w-3 h-3" /> Limpiar filtros
-                </button>
-              )}
-            </div>
-
-            {/* Products grid */}
-            <AnimatePresence mode="wait">
-              {filteredProducts.length === 0 ? (
-                <motion.div
-                  key="empty"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="flex flex-col items-center justify-center py-24 text-center"
-                >
-                  <span className="text-6xl mb-4">🔍</span>
-                  <p className="font-bold text-xl text-white">No encontramos resultados</p>
-                  <p className="text-sm mt-1" style={{ color: 'rgba(255,255,255,0.4)' }}>
-                    Intenta con otras palabras o filtros
-                  </p>
-                </motion.div>
-              ) : (
-                <motion.div
-                  key={`${activeCategory}`}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5"
-                >
-                  {filteredProducts.map((product) => (
-                    <ProductCard key={product.id} product={product} layout="grid" />
+          {/* Tag filters */}
+          <AnimatePresence>
+            {showFilters && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                className="overflow-hidden"
+              >
+                <div className="flex flex-wrap gap-2 pb-4">
+                  {tagFilters.map((f) => (
+                    <button
+                      key={f.id}
+                      onClick={() => toggleTag(f.id)}
+                      className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+                        activeTags.includes(f.id)
+                          ? 'bg-orange-500 text-white'
+                          : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-orange-100 hover:text-orange-600'
+                      }`}
+                    >
+                      {f.label}
+                    </button>
                   ))}
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </main>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Categories */}
+          <div className="flex gap-2 overflow-x-auto pb-4 hide-scrollbar">
+            {allCategories.map((cat) => (
+              <button
+                key={cat.id}
+                onClick={() => setActiveCategory(cat.id)}
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-xl whitespace-nowrap text-sm font-semibold transition-all flex-shrink-0 ${
+                  activeCategory === cat.id
+                    ? 'bg-orange-500 text-white shadow-md shadow-orange-500/25'
+                    : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-orange-100 hover:text-orange-600 dark:hover:bg-orange-950/30'
+                }`}
+              >
+                <span>{cat.icon}</span>
+                <span>{cat.name}</span>
+              </button>
+            ))}
+          </div>
         </div>
+      </div>
+
+      {/* Products Grid */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+        <div className="flex items-center justify-between mb-6">
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            <span className="font-bold text-gray-900 dark:text-white">{filteredProducts.length}</span>{' '}
+            {filteredProducts.length === 1 ? 'producto' : 'productos'} encontrados
+          </p>
+          {(search || activeTags.length > 0 || activeCategory !== 'all') && (
+            <button
+              onClick={() => { setSearch(''); setActiveTags([]); setActiveCategory('all'); }}
+              className="text-xs text-orange-500 hover:text-orange-600 font-semibold flex items-center gap-1"
+            >
+              <X className="w-3 h-3" /> Limpiar filtros
+            </button>
+          )}
+        </div>
+
+        <AnimatePresence mode="wait">
+          {filteredProducts.length === 0 ? (
+            <motion.div
+              key="empty"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="flex flex-col items-center justify-center py-24 text-center"
+            >
+              <span className="text-6xl mb-4">🔍</span>
+              <p className="font-bold text-xl text-gray-700 dark:text-gray-300">No encontramos resultados</p>
+              <p className="text-gray-400 mt-1 text-sm">Intenta con otras palabras o filtros</p>
+            </motion.div>
+          ) : (
+            <motion.div
+              key={`${layout}-${activeCategory}`}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className={
+                layout === 'grid'
+                  ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5'
+                  : 'space-y-3 max-w-3xl'
+              }
+            >
+              {filteredProducts.map((product) => (
+                <ProductCard key={product.id} product={product} layout={layout} />
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );
