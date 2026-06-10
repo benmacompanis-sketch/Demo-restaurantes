@@ -10,21 +10,12 @@ export function FeaturedProducts() {
   return (
     <section className="py-20 bg-gray-50 dark:bg-gray-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
-        <div className="flex items-end justify-between mb-10">
-          <div>
-            <span className="text-orange-500 font-semibold text-sm uppercase tracking-widest">Lo Mejor</span>
-            <h2 className="text-3xl sm:text-4xl font-black text-gray-900 dark:text-white mt-1">
-              Productos Destacados
-            </h2>
-            <p className="text-gray-500 dark:text-gray-400 mt-2">Los favoritos de nuestros clientes</p>
-          </div>
-          <Link
-            href="/menu"
-            className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold px-5 py-3 rounded-xl transition-all shadow-lg shadow-orange-500/25 text-sm"
-          >
-            Ver todo el menú
-            <ArrowRight className="w-4 h-4" />
-          </Link>
+        <div className="text-center mb-10">
+          <span className="text-orange-500 font-semibold text-sm uppercase tracking-widest">Lo Mejor</span>
+          <h2 className="text-3xl sm:text-4xl font-black text-gray-900 dark:text-white mt-1">
+            Productos Destacados
+          </h2>
+          <p className="text-gray-500 dark:text-gray-400 mt-2">Los favoritos de nuestros clientes</p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
@@ -41,13 +32,13 @@ export function FeaturedProducts() {
           ))}
         </div>
 
-        <div className="mt-10 text-center sm:hidden">
+        <div className="mt-12 flex justify-center">
           <Link
             href="/menu"
-            className="inline-flex items-center gap-2 bg-orange-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-orange-600 transition-all"
+            className="group flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold px-8 py-4 rounded-2xl transition-all shadow-2xl shadow-orange-500/30 text-base"
           >
-            Ver Menú Completo
-            <ArrowRight className="w-4 h-4" />
+            Ver todo el menú
+            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
       </div>
