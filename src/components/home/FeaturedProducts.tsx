@@ -32,15 +32,20 @@ export function FeaturedProducts() {
           ))}
         </div>
 
-        <div className="mt-12 flex justify-center">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mt-14 flex justify-center"
+        >
           <Link
             href="/menu"
-            className="group flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-bold px-8 py-4 rounded-2xl transition-all shadow-2xl shadow-orange-500/30 text-base"
+            className="group flex items-center gap-3 bg-orange-500 hover:bg-orange-600 active:scale-95 text-white font-black px-12 py-5 rounded-2xl transition-all shadow-2xl shadow-orange-500/40 text-lg"
           >
             Ver todo el menú
-            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            <ArrowRight className="w-6 h-6 group-hover:translate-x-1.5 transition-transform" />
           </Link>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
