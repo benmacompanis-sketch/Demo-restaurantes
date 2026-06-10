@@ -33,7 +33,7 @@ const promos = [
 
 export function PromoBanner() {
   return (
-    <section className="py-20 bg-[#111111]">
+    <section className="py-20 bg-white dark:bg-gray-950">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-10">
           <span className="text-orange-500 font-semibold text-sm uppercase tracking-widest">Ofertas Especiales</span>

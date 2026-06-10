@@ -12,13 +12,13 @@ import { usePathname } from 'next/navigation';
 const inter = Inter({ subsets: ['latin'] });
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const [darkMode, setDarkMode] = useState(true);
+  const [darkMode, setDarkMode] = useState(false);
   const pathname = usePathname();
   const isAdmin = pathname?.startsWith('/admin');
 
   useEffect(() => {
     const saved = localStorage.getItem('darkMode');
-    if (saved !== null) setDarkMode(saved === 'true');
+    if (saved === 'true') setDarkMode(true);
   }, []);
 
   const toggleDark = () => {
@@ -39,7 +39,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta property="og:type" content="restaurant" />
         <link rel="icon" href="/favicon.ico" />
       </head>
-      <body className={`${inter.className} bg-white dark:bg-[#111111] transition-colors duration-300`}>
+      <body className={`${inter.className} bg-white dark:bg-gray-950 transition-colors duration-300`}>
         {!isAdmin && <Header darkMode={darkMode} toggleDarkMode={toggleDark} />}
         {!isAdmin && <CartDrawer />}
         <div className={isAdmin ? '' : ''}>
