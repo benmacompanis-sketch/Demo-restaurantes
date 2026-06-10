@@ -1,27 +1,34 @@
 @import "tailwindcss";
 
 @layer base {
-  * {
-    box-sizing: border-box;
-  }
-
-  html {
-    scroll-behavior: smooth;
-  }
-
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
   body {
+    background-color: #0A0A0A;
+    color: #F5F5F0;
     font-family: var(--font-inter, sans-serif);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+  @media (pointer: fine) {
+    body, a, button { cursor: none !important; }
+  }
 }
 
 @layer utilities {
-  .hide-scrollbar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+  .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  .hide-scrollbar::-webkit-scrollbar { display: none; }
+  .font-display { font-family: var(--font-playfair, Georgia, serif); }
+  .text-gradient {
+    background: linear-gradient(135deg, #FFB800 0%, #FF6B35 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
-  .hide-scrollbar::-webkit-scrollbar {
-    display: none;
+  .bg-glass {
+    background: rgba(255,255,255,0.03);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.06);
   }
 }

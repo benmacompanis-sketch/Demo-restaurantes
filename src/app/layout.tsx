@@ -1,24 +1,35 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Inter } from 'next/font/google';
+import { Inter, Playfair_Display } from 'next/font/google';
 import './globals.css';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { CartDrawer } from '@/components/cart/CartDrawer';
+import { CustomCursor } from '@/components/ui/CustomCursor';
 import { restaurantConfig } from '@/data/config';
 import { usePathname } from 'next/navigation';
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+});
+
+const playfair = Playfair_Display({
+  subsets: ['latin'],
+  variable: '--font-playfair',
+  weight: ['400', '500', '600', '700', '800', '900'],
+  style: ['normal', 'italic'],
+});
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(true);
   const pathname = usePathname();
   const isAdmin = pathname?.startsWith('/admin');
 
   useEffect(() => {
     const saved = localStorage.getItem('darkMode');
-    if (saved === 'true') setDarkMode(true);
+    if (saved !== null) setDarkMode(saved === 'true');
   }, []);
 
   const toggleDark = () => {
@@ -29,7 +40,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   };
 
   return (
-    <html lang="es" className={darkMode ? 'dark' : ''}>
+    <html lang="es" className={`${inter.variable} ${playfair.variable}${darkMode ? ' dark' : ''}`}>
       <head>
         <title>{restaurantConfig.name} — {restaurantConfig.tagline}</title>
         <meta name="description" content={restaurantConfig.description} />
@@ -39,7 +50,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta property="og:type" content="restaurant" />
         <link rel="icon" href="/favicon.ico" />
       </head>
-      <body className={`${inter.className} bg-white dark:bg-gray-950 transition-colors duration-300`}>
+      <body
+        className={`${inter.variable} ${playfair.variable}`}
+        style={{ fontFamily: 'var(--font-inter, sans-serif)' }}
+      >
+        <CustomCursor />
         {!isAdmin && <Header darkMode={darkMode} toggleDarkMode={toggleDark} />}
         {!isAdmin && <CartDrawer />}
         <div className={isAdmin ? '' : ''}>
