@@ -62,12 +62,12 @@ export default function CheckoutPage() {
 
   if (items.length === 0 && !submitted) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950 pt-20 px-4">
+      <div className="min-h-screen flex items-center justify-center pt-20 px-4" style={{ background: 'var(--surface-0)' }}>
         <div className="text-center">
           <span className="text-6xl">🛒</span>
-          <h2 className="font-black text-2xl text-gray-900 dark:text-white mt-4">Carrito vacío</h2>
-          <p className="text-gray-500 mt-2">Agrega productos antes de continuar</p>
-          <Link href="/menu" className="mt-6 inline-flex bg-orange-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-orange-600 transition-all">
+          <h2 className="font-black text-2xl mt-4" style={{ color: 'var(--text-1)' }}>Carrito vacío</h2>
+          <p className="mt-2" style={{ color: 'var(--text-2)' }}>Agrega productos antes de continuar</p>
+          <Link href="/menu" className="mt-6 inline-flex text-white font-bold px-6 py-3 rounded-xl transition-all hover:brightness-110" style={{ background: '#FF6B35' }}>
             Ver Menú
           </Link>
         </div>
@@ -77,25 +77,27 @@ export default function CheckoutPage() {
 
   if (submitted) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950 pt-20 px-4">
+      <div className="min-h-screen flex items-center justify-center pt-20 px-4" style={{ background: 'var(--surface-0)' }}>
         <motion.div
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          className="bg-white dark:bg-gray-900 rounded-3xl p-8 text-center max-w-md w-full shadow-xl"
+          className="rounded-3xl p-8 text-center max-w-md w-full"
+          style={{ background: 'var(--surface-1)', border: '1px solid var(--border)' }}
         >
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.2, type: 'spring' }}
-            className="w-20 h-20 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-6"
+            className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6"
+            style={{ background: 'rgba(34,197,94,0.15)' }}
           >
-            <CheckCircle className="w-10 h-10 text-green-500" />
+            <CheckCircle className="w-10 h-10 text-green-400" />
           </motion.div>
-          <h2 className="font-black text-2xl text-gray-900 dark:text-white mb-2">¡Pedido enviado!</h2>
-          <p className="text-gray-500 dark:text-gray-400 mb-6">
+          <h2 className="font-black text-2xl mb-2" style={{ color: 'var(--text-1)' }}>¡Pedido enviado!</h2>
+          <p className="mb-6" style={{ color: 'var(--text-2)' }}>
             Te estamos redirigiendo a WhatsApp para confirmar tu pedido con {restaurantConfig.name}.
           </p>
-          <Link href="/" className="block bg-orange-500 text-white font-bold py-3 rounded-xl hover:bg-orange-600 transition-all">
+          <Link href="/" className="block text-white font-bold py-3 rounded-xl transition-all hover:brightness-110" style={{ background: '#FF6B35' }}>
             Volver al inicio
           </Link>
         </motion.div>
@@ -104,24 +106,25 @@ export default function CheckoutPage() {
   }
 
   const inputClass = (field: string) =>
-    `w-full px-4 py-3 bg-gray-50 dark:bg-gray-800 border rounded-xl text-gray-900 dark:text-white placeholder-gray-400 outline-none transition-all text-sm focus:ring-2 focus:ring-orange-400 ${
-      errors[field] ? 'border-red-400' : 'border-gray-200 dark:border-gray-700 focus:border-orange-400'
+    `w-full px-4 py-3 rounded-xl text-sm outline-none transition-all ${
+      errors[field]
+        ? 'border border-red-500'
+        : 'border border-[rgba(255,255,255,0.08)] focus:border-[#FF6B35]'
     }`;
 
+  const inputStyle = { background: 'var(--surface-2)', color: 'var(--text-1)' };
+
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 pt-20">
+    <div className="min-h-screen pt-16 sm:pt-[72px]" style={{ background: 'var(--surface-0)' }}>
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8">
         {/* Header */}
         <div className="flex items-center gap-4 mb-8">
-          <button
-            onClick={() => router.back()}
-            className="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-all"
-          >
-            <ArrowLeft className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+          <button onClick={() => router.back()} className="p-2 rounded-xl transition-all hover:bg-white/[0.06]" style={{ color: 'var(--text-2)' }}>
+            <ArrowLeft className="w-5 h-5" />
           </button>
           <div>
-            <h1 className="font-black text-2xl sm:text-3xl text-gray-900 dark:text-white">Finalizar Pedido</h1>
-            <p className="text-sm text-gray-500">{items.length} {items.length === 1 ? 'producto' : 'productos'}</p>
+            <h1 className="font-black text-2xl sm:text-3xl" style={{ color: 'var(--text-1)' }}>Finalizar Pedido</h1>
+            <p className="text-sm" style={{ color: 'var(--text-2)' }}>{items.length} {items.length === 1 ? 'producto' : 'productos'}</p>
           </div>
         </div>
 
@@ -129,8 +132,8 @@ export default function CheckoutPage() {
           {/* Form */}
           <div className="lg:col-span-3 space-y-5">
             {/* Delivery Type */}
-            <div className="bg-white dark:bg-gray-900 rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-gray-800">
-              <h2 className="font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+            <div className="rounded-2xl p-5" style={{ background: 'var(--surface-1)', border: '1px solid var(--border)' }}>
+              <h2 className="font-bold mb-4 flex items-center gap-2" style={{ color: 'var(--text-1)' }}>
                 <Package className="w-5 h-5 text-orange-500" />
                 Tipo de Entrega
               </h2>
@@ -163,7 +166,7 @@ export default function CheckoutPage() {
 
             {/* Customer Info */}
             <div className="bg-white dark:bg-gray-900 rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-gray-800 space-y-4">
-              <h2 className="font-bold text-gray-900 dark:text-white flex items-center gap-2">
+              <h2 className="font-bold flex items-center gap-2" style={{ color: 'var(--text-1)' }}>
                 <span className="w-6 h-6 bg-orange-500 text-white rounded-lg flex items-center justify-center text-xs font-black">2</span>
                 Tus datos
               </h2>
@@ -173,6 +176,7 @@ export default function CheckoutPage() {
                   <input
                     className={inputClass('name')}
                     placeholder="Tu nombre completo"
+                    style={inputStyle}
                     value={name}
                     onChange={(e) => { setName(e.target.value); setErrors((prev) => ({ ...prev, name: '' })); }}
                   />
@@ -183,6 +187,7 @@ export default function CheckoutPage() {
                   <input
                     className={inputClass('phone')}
                     placeholder="+54 9 11 1234-5678"
+                    style={inputStyle}
                     value={phone}
                     onChange={(e) => { setPhone(e.target.value); setErrors((prev) => ({ ...prev, phone: '' })); }}
                   />
@@ -196,6 +201,7 @@ export default function CheckoutPage() {
                   <input
                     className={inputClass('address')}
                     placeholder="Calle, número, piso, depto..."
+                    style={inputStyle}
                     value={address}
                     onChange={(e) => { setAddress(e.target.value); setErrors((prev) => ({ ...prev, address: '' })); }}
                   />
@@ -207,6 +213,7 @@ export default function CheckoutPage() {
                 <label className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1.5 block">Observaciones</label>
                 <textarea
                   className={`${inputClass('notes')} resize-none`}
+                  style={inputStyle}
                   rows={3}
                   placeholder="Sin cebolla, extra salsa, timbre piso 3..."
                   value={notes}
@@ -217,8 +224,8 @@ export default function CheckoutPage() {
 
             {/* Delivery Zones */}
             {deliveryType === 'delivery' && (
-              <div className="bg-white dark:bg-gray-900 rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-gray-800">
-                <h2 className="font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+              <div className="rounded-2xl p-5" style={{ background: 'var(--surface-1)', border: '1px solid var(--border)' }}>
+                <h2 className="font-bold mb-4 flex items-center gap-2" style={{ color: 'var(--text-1)' }}>
                   <MapPin className="w-5 h-5 text-orange-500" />
                   Zona de Envío
                 </h2>
@@ -254,9 +261,9 @@ export default function CheckoutPage() {
 
           {/* Order Summary */}
           <div className="lg:col-span-2">
-            <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 sticky top-28">
-              <div className="p-5 border-b border-gray-100 dark:border-gray-800">
-                <h2 className="font-bold text-gray-900 dark:text-white">Resumen del Pedido</h2>
+            <div className="rounded-2xl sticky top-28" style={{ background: 'var(--surface-1)', border: '1px solid var(--border)' }}>
+              <div className="p-5" style={{ borderBottom: '1px solid var(--border)' }}>
+                <h2 className="font-bold" style={{ color: 'var(--text-1)' }}>Resumen del Pedido</h2>
               </div>
 
               <div className="p-4 space-y-3 max-h-64 overflow-y-auto">
@@ -274,20 +281,20 @@ export default function CheckoutPage() {
                 ))}
               </div>
 
-              <div className="p-5 border-t border-gray-100 dark:border-gray-800 space-y-3">
-                <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400">
+              <div className="p-5 space-y-3" style={{ borderTop: '1px solid var(--border)' }}>
+                <div className="flex justify-between text-sm" style={{ color: 'var(--text-2)' }}>
                   <span>Subtotal</span>
                   <span className="font-semibold">{formatPrice(cartTotal)}</span>
                 </div>
                 {deliveryType === 'delivery' && (
-                  <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400">
+                  <div className="flex justify-between text-sm" style={{ color: 'var(--text-2)' }}>
                     <span>Envío {selectedZone ? `(${selectedZone.name})` : ''}</span>
                     <span className={`font-semibold ${deliveryCost === 0 ? 'text-green-500' : ''}`}>
                       {deliveryCost === 0 ? '¡GRATIS!' : formatPrice(deliveryCost)}
                     </span>
                   </div>
                 )}
-                <div className="flex justify-between font-black text-lg text-gray-900 dark:text-white border-t border-gray-100 dark:border-gray-800 pt-3">
+                <div className="flex justify-between font-black text-lg pt-3" style={{ borderTop: '1px solid var(--border)', color: 'var(--text-1)' }}>
                   <span>Total</span>
                   <span className="text-orange-500">{formatPrice(finalTotal)}</span>
                 </div>

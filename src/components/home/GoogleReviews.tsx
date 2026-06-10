@@ -6,7 +6,7 @@ import { Star } from 'lucide-react';
 const reviews = [
   {
     initials: 'MR',
-    color: 'bg-blue-500',
+    color: '#3B82F6',
     name: 'Marcos R.',
     source: 'Food blogger · Instagram',
     date: 'hace 2 semanas',
@@ -15,7 +15,7 @@ const reviews = [
   },
   {
     initials: 'VL',
-    color: 'bg-purple-500',
+    color: '#8B5CF6',
     name: 'Valentina L.',
     source: 'Reseñas locales · Google Maps',
     date: 'hace 1 mes',
@@ -24,7 +24,7 @@ const reviews = [
   },
   {
     initials: 'DM',
-    color: 'bg-green-600',
+    color: '#10B981',
     name: 'Diego M.',
     source: 'Local Guide · Google Maps',
     date: 'hace 3 semanas',
@@ -33,7 +33,7 @@ const reviews = [
   },
   {
     initials: 'CF',
-    color: 'bg-orange-500',
+    color: '#FF6B35',
     name: 'Carla F.',
     source: 'Periodismo gastronómico · 2025',
     date: 'hace 2 meses',
@@ -55,88 +55,80 @@ function GoogleIcon() {
 
 export function GoogleReviews() {
   return (
-    <section className="py-20 bg-gray-950">
+    <section className="section-pad" style={{ background: 'var(--surface-1)' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
+
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-10 p-5 rounded-2xl border border-gray-800 bg-gray-900/50"
+          className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-10 p-5 rounded-2xl"
+          style={{ background: 'var(--surface-2)', border: '1px solid var(--border)' }}
         >
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center gap-4">
             <div className="flex items-center gap-2">
               <GoogleIcon />
-              <span className="text-white font-semibold text-sm">Reseñas de Google</span>
+              <span className="font-semibold text-sm" style={{ color: 'var(--text-1)' }}>Reseñas de Google</span>
             </div>
-            <div className="w-px h-6 bg-gray-700" />
-            <div className="flex items-center gap-2">
+            <div className="w-px h-5" style={{ background: 'var(--border-strong)' }} />
+            <div className="flex items-center gap-2.5">
               <span className="text-3xl font-black text-yellow-400">4.9</span>
               <div className="flex gap-0.5">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-                ))}
+                {[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 text-yellow-400 fill-yellow-400" />)}
               </div>
             </div>
-            <span className="text-gray-400 text-sm hidden sm:block">basado en reseñas recientes</span>
+            <span className="text-sm hidden sm:block" style={{ color: 'var(--text-2)' }}>basado en reseñas recientes</span>
           </div>
           <a
-            href="https://www.google.com/search?q=La+Brasa+Grill+Buenos+Aires+reseñas"
+            href="https://www.google.com/search?q=La+Brasa+Grill+Buenos+Aires"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-orange-400 hover:text-orange-300 font-semibold text-sm transition-colors whitespace-nowrap"
+            className="text-sm font-semibold transition-colors whitespace-nowrap"
+            style={{ color: '#FF6B35' }}
           >
             Ver todas en Google ↗
           </a>
         </motion.div>
 
-        {/* Review Cards */}
+        {/* Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {reviews.map((review, i) => (
             <motion.div
               key={i}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 18 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className="bg-gray-900 border border-gray-800 rounded-2xl p-5 flex flex-col gap-4"
+              transition={{ delay: i * 0.09 }}
+              className="rounded-2xl p-5 flex flex-col gap-4 card-hover"
+              style={{ background: 'var(--surface-2)', border: '1px solid var(--border)' }}
             >
-              {/* Author */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className={`w-10 h-10 ${review.color} rounded-full flex items-center justify-center flex-shrink-0`}>
+                  <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: review.color }}>
                     <span className="text-white text-sm font-black">{review.initials}</span>
                   </div>
                   <div>
-                    <p className="text-white font-semibold text-sm leading-tight">{review.name}</p>
-                    <p className="text-gray-400 text-xs mt-0.5">{review.source}</p>
+                    <p className="font-semibold text-sm leading-tight" style={{ color: 'var(--text-1)' }}>{review.name}</p>
+                    <p className="text-xs mt-0.5" style={{ color: 'var(--text-3)' }}>{review.source}</p>
                   </div>
                 </div>
                 <GoogleIcon />
               </div>
 
-              {/* Stars + date */}
               <div className="flex items-center gap-2">
                 <div className="flex gap-0.5">
-                  {[...Array(5)].map((_, j) => (
-                    <Star key={j} className="w-3.5 h-3.5 text-yellow-400 fill-yellow-400" />
-                  ))}
+                  {[...Array(5)].map((_, j) => <Star key={j} className="w-3 h-3 text-yellow-400 fill-yellow-400" />)}
                 </div>
-                <span className="text-gray-400 text-xs">{review.date}</span>
+                <span className="text-xs" style={{ color: 'var(--text-3)' }}>{review.date}</span>
               </div>
 
-              {/* Text */}
-              <p className="text-gray-300 text-sm leading-relaxed flex-1">
+              <p className="text-sm leading-relaxed flex-1" style={{ color: 'var(--text-2)' }}>
                 {review.highlight
                   ? review.text.split(review.highlight).map((part, idx, arr) =>
                       idx < arr.length - 1 ? (
-                        <span key={idx}>
-                          {part}
-                          <span className="text-orange-400 font-semibold">{review.highlight}</span>
-                        </span>
-                      ) : (
-                        <span key={idx}>{part}</span>
-                      )
+                        <span key={idx}>{part}<span className="font-semibold" style={{ color: '#FF6B35' }}>{review.highlight}</span></span>
+                      ) : <span key={idx}>{part}</span>
                     )
                   : review.text}
               </p>

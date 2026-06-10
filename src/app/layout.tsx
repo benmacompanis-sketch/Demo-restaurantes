@@ -9,16 +9,22 @@ import { CartDrawer } from '@/components/cart/CartDrawer';
 import { restaurantConfig } from '@/data/config';
 import { usePathname } from 'next/navigation';
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
+  weight: ['400', '500', '600', '700', '800', '900'],
+});
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(true);
   const pathname = usePathname();
   const isAdmin = pathname?.startsWith('/admin');
 
   useEffect(() => {
     const saved = localStorage.getItem('darkMode');
-    if (saved === 'true') setDarkMode(true);
+    if (saved === 'false') setDarkMode(false);
+    else setDarkMode(true);
   }, []);
 
   const toggleDark = () => {
@@ -37,23 +43,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta property="og:title" content={restaurantConfig.name} />
         <meta property="og:description" content={restaurantConfig.description} />
         <meta property="og:type" content="restaurant" />
+        <meta name="theme-color" content="#09090B" />
         <link rel="icon" href="/favicon.ico" />
       </head>
-      <body className={`${inter.className} bg-white dark:bg-gray-950 transition-colors duration-300`}>
+      <body className={`${inter.variable} font-sans bg-white dark:bg-[#09090B] transition-colors duration-300`}>
         {!isAdmin && <Header darkMode={darkMode} toggleDarkMode={toggleDark} />}
         {!isAdmin && <CartDrawer />}
-        <div className={isAdmin ? '' : ''}>
-          {children}
-        </div>
+        {children}
         {!isAdmin && <Footer />}
 
-        {/* Floating WhatsApp */}
         {!isAdmin && (
           <a
             href={`https://wa.me/${restaurantConfig.whatsappNumber}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="fixed bottom-6 right-6 z-40 w-14 h-14 bg-green-500 hover:bg-green-600 rounded-full flex items-center justify-center shadow-2xl shadow-green-500/30 transition-all hover:scale-110"
+            className="fixed bottom-6 right-6 z-40 w-14 h-14 bg-green-500 hover:bg-green-400 rounded-2xl flex items-center justify-center shadow-2xl shadow-green-500/40 transition-all hover:scale-110 active:scale-95"
             title="Contactar por WhatsApp"
           >
             <svg className="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24">
