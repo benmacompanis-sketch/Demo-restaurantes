@@ -2,10 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ShoppingCart, Menu, X, Moon, Sun, Search, Flame } from 'lucide-react';
+import { ShoppingCart, Menu, X, Moon, Sun, Search } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCartStore } from '@/context/CartStore';
 import { restaurantConfig } from '@/data/config';
+import { LogoMark } from '@/components/ui/LogoMark';
 
 interface HeaderProps {
   darkMode: boolean;
@@ -33,7 +34,7 @@ export function Header({ darkMode, toggleDarkMode }: HeaderProps) {
     { href: '/', label: 'Inicio' },
     { href: '/menu', label: 'Menú' },
     { href: '/#info', label: 'Nosotros' },
-    { href: '/#contacto', label: 'Contacto' },
+    { href: '/#info', label: 'Contacto' },
   ];
 
   return (
@@ -48,13 +49,10 @@ export function Header({ darkMode, toggleDarkMode }: HeaderProps) {
 
             {/* Logo */}
             <Link href="/" className="flex items-center gap-3 group">
-              <div className="relative w-9 h-9 rounded-xl flex items-center justify-center shadow-lg transition-all group-hover:scale-105"
-                style={{ background: 'linear-gradient(135deg, #FF6B35, #E55520)', boxShadow: '0 4px 16px rgba(255,107,53,0.4)' }}>
-                <Flame className="w-[18px] h-[18px] text-white" fill="white" />
-              </div>
+              <LogoMark size={40} className="transition-transform group-hover:scale-105 drop-shadow-lg" />
               <div className="hidden sm:block">
                 <p className="font-black text-white text-[15px] leading-none tracking-tight">{restaurantConfig.name}</p>
-                <p className="text-[11px] font-medium mt-0.5" style={{ color: '#FF6B35' }}>{restaurantConfig.tagline}</p>
+                <p className="text-[11px] font-bold tracking-[0.12em] uppercase mt-0.5" style={{ color: '#FF6B35' }}>{restaurantConfig.tagline}</p>
               </div>
             </Link>
 
@@ -139,9 +137,7 @@ export function Header({ darkMode, toggleDarkMode }: HeaderProps) {
             >
               <div className="flex items-center justify-between p-5" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
                 <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: '#FF6B35' }}>
-                    <Flame className="w-4 h-4 text-white" fill="white" />
-                  </div>
+                  <LogoMark size={32} />
                   <span className="font-black text-white text-sm">{restaurantConfig.name}</span>
                 </div>
                 <button onClick={() => setMobileMenuOpen(false)} className="p-2 rounded-lg text-white/50 hover:text-white hover:bg-white/[0.07] transition-all">

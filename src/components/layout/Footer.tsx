@@ -1,8 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import { MapPin, Phone, Mail, Clock, Flame } from 'lucide-react';
+import { MapPin, Phone, Mail, Clock } from 'lucide-react';
 import { restaurantConfig } from '@/data/config';
+import { LogoMark } from '@/components/ui/LogoMark';
 
 function InstagramIcon() {
   return (
@@ -43,10 +44,7 @@ export function Footer() {
           {/* Brand */}
           <div className="lg:col-span-1">
             <div className="flex items-center gap-3 mb-5">
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center"
-                style={{ background: 'linear-gradient(135deg, #FF6B35, #E55520)', boxShadow: '0 4px 16px rgba(255,107,53,0.35)' }}>
-                <Flame className="w-5 h-5 text-white" fill="white" />
-              </div>
+              <LogoMark size={40} />
               <div>
                 <p className="font-black text-base leading-none" style={{ color: 'var(--text-1)' }}>{restaurantConfig.name}</p>
                 <p className="text-xs mt-0.5" style={{ color: '#FF6B35' }}>{restaurantConfig.tagline}</p>
