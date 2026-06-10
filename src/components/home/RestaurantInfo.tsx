@@ -12,7 +12,7 @@ const stats = [
 
 export function RestaurantInfo() {
   return (
-    <section id="info" className="py-20 bg-gray-50 dark:bg-gray-900">
+    <section id="info" className="py-20 bg-[#111111]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Left */}
@@ -22,10 +22,10 @@ export function RestaurantInfo() {
             viewport={{ once: true }}
           >
             <span className="text-orange-500 font-semibold text-sm uppercase tracking-widest">Sobre Nosotros</span>
-            <h2 className="text-3xl sm:text-4xl font-black text-gray-900 dark:text-white mt-1 mb-4">
+            <h2 className="text-3xl sm:text-4xl font-black text-gray-900 text-white mt-1 mb-4">
               Una experiencia gastronómica única
             </h2>
-            <p className="text-gray-500 dark:text-gray-400 leading-relaxed mb-8">
+            <p className="text-gray-400 leading-relaxed mb-8">
               En {restaurantConfig.name} cada plato es una obra de arte. Usamos ingredientes frescos
               y de primera calidad para crear sabores que te sorprenderán. Nuestro equipo de chefs
               apasionados trabaja cada día para ofrecerte la mejor experiencia gastronómica.
@@ -42,11 +42,11 @@ export function RestaurantInfo() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.1 }}
-                    className="bg-white dark:bg-gray-800 rounded-2xl p-4 text-center shadow-sm"
+                    className="bg-[#1a1a1a] border border-white/5 rounded-2xl p-4 text-center"
                   >
                     <Icon className={`w-6 h-6 ${stat.color} mx-auto mb-1`} />
-                    <p className="font-black text-2xl text-gray-900 dark:text-white">{stat.value}</p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">{stat.label}</p>
+                    <p className="font-black text-2xl text-white">{stat.value}</p>
+                    <p className="text-xs text-gray-500">{stat.label}</p>
                   </motion.div>
                 );
               })}
@@ -59,7 +59,7 @@ export function RestaurantInfo() {
                   href={restaurantConfig.socialMedia.instagram}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 px-4 py-2.5 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:border-pink-400 hover:text-pink-500 transition-all"
+                  className="flex items-center gap-2 bg-[#1a1a1a] border border-white/5 px-4 py-2.5 rounded-xl text-sm font-medium text-gray-300 hover:border-pink-400 hover:text-pink-400 transition-all"
                 >
                   <Globe className="w-4 h-4" /> Instagram
                 </a>
@@ -69,7 +69,7 @@ export function RestaurantInfo() {
                   href={restaurantConfig.socialMedia.facebook}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 px-4 py-2.5 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 hover:border-blue-400 hover:text-blue-500 transition-all"
+                  className="flex items-center gap-2 bg-[#1a1a1a] border border-white/5 px-4 py-2.5 rounded-xl text-sm font-medium text-gray-300 hover:border-blue-400 hover:text-blue-400 transition-all"
                 >
                   <Share2 className="w-4 h-4" /> Facebook
                 </a>
@@ -82,35 +82,35 @@ export function RestaurantInfo() {
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className="bg-white dark:bg-gray-800 rounded-3xl p-6 shadow-xl border border-gray-100 dark:border-gray-700 space-y-6"
+            className="bg-[#1a1a1a] border border-white/5 rounded-3xl p-6 space-y-6"
           >
-            <h3 className="font-black text-xl text-gray-900 dark:text-white">Información del Local</h3>
+            <h3 className="font-black text-xl text-white">Información del Local</h3>
 
             <div className="space-y-4">
               <div className="flex items-start gap-3">
-                <div className="w-10 h-10 bg-orange-100 dark:bg-orange-900/30 rounded-xl flex items-center justify-center flex-shrink-0">
+                <div className="w-10 h-10 bg-orange-500/10 rounded-xl flex items-center justify-center flex-shrink-0">
                   <MapPin className="w-5 h-5 text-orange-500" />
                 </div>
                 <div>
                   <p className="text-xs text-gray-400 font-medium uppercase tracking-wider mb-0.5">Dirección</p>
-                  <p className="text-gray-700 dark:text-gray-300 font-medium">{restaurantConfig.address}</p>
+                  <p className="text-gray-300 font-medium">{restaurantConfig.address}</p>
                 </div>
               </div>
 
               <div className="flex items-start gap-3">
-                <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center flex-shrink-0">
+                <div className="w-10 h-10 bg-blue-500/10 rounded-xl flex items-center justify-center flex-shrink-0">
                   <Phone className="w-5 h-5 text-blue-500" />
                 </div>
                 <div>
                   <p className="text-xs text-gray-400 font-medium uppercase tracking-wider mb-0.5">Teléfono</p>
-                  <a href={`tel:${restaurantConfig.phone}`} className="text-gray-700 dark:text-gray-300 font-medium hover:text-orange-500 transition-colors">
+                  <a href={`tel:${restaurantConfig.phone}`} className="text-gray-300 font-medium hover:text-orange-400 transition-colors">
                     {restaurantConfig.phone}
                   </a>
                 </div>
               </div>
 
               <div className="flex items-start gap-3">
-                <div className="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-xl flex items-center justify-center flex-shrink-0">
+                <div className="w-10 h-10 bg-green-500/10 rounded-xl flex items-center justify-center flex-shrink-0">
                   <Clock className="w-5 h-5 text-green-500" />
                 </div>
                 <div>
@@ -118,8 +118,8 @@ export function RestaurantInfo() {
                   <div className="space-y-1.5">
                     {Object.entries(restaurantConfig.hours).map(([day, hours]) => (
                       <div key={day} className="flex items-center justify-between gap-4">
-                        <span className="text-sm text-gray-600 dark:text-gray-400">{day}</span>
-                        <span className="text-sm font-semibold text-gray-900 dark:text-white">{hours}</span>
+                        <span className="text-sm text-gray-500">{day}</span>
+                        <span className="text-sm font-semibold text-white">{hours}</span>
                       </div>
                     ))}
                   </div>

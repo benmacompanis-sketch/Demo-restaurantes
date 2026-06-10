@@ -6,7 +6,7 @@ import { restaurantConfig } from '@/data/config';
 
 export function Footer() {
   return (
-    <footer className="bg-gray-900 dark:bg-black text-gray-300 pt-16 pb-8">
+    <footer className="bg-[#0a0a0a] border-t border-white/5 text-gray-300 pt-16 pb-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
           {/* Brand */}
@@ -27,7 +27,7 @@ export function Footer() {
                   href={restaurantConfig.socialMedia.instagram}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-9 h-9 bg-gray-800 hover:bg-gradient-to-br hover:from-purple-600 hover:to-pink-500 rounded-lg flex items-center justify-center transition-all"
+                  className="w-9 h-9 bg-white/5 hover:bg-gradient-to-br hover:from-purple-600 hover:to-pink-500 rounded-lg flex items-center justify-center transition-all"
                 >
                   <Globe className="w-4 h-4 text-white" />
                 </a>
@@ -37,7 +37,7 @@ export function Footer() {
                   href={restaurantConfig.socialMedia.facebook}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-9 h-9 bg-gray-800 hover:bg-blue-600 rounded-lg flex items-center justify-center transition-all"
+                  className="w-9 h-9 bg-white/5 hover:bg-blue-600 rounded-lg flex items-center justify-center transition-all"
                 >
                   <Share2 className="w-4 h-4 text-white" />
                 </a>
@@ -47,7 +47,7 @@ export function Footer() {
                   href={restaurantConfig.socialMedia.tiktok}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-9 h-9 bg-gray-800 hover:bg-black rounded-lg flex items-center justify-center transition-all"
+                  className="w-9 h-9 bg-white/5 hover:bg-black rounded-lg flex items-center justify-center transition-all"
                 >
                   <span className="text-white text-xs font-bold">TK</span>
                 </a>
@@ -131,7 +131,7 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-gray-800 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="border-t border-white/5 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-gray-500">
             © {new Date().getFullYear()} {restaurantConfig.name}. Todos los derechos reservados.
           </p>

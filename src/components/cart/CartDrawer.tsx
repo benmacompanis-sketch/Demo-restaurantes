@@ -39,22 +39,22 @@ export function CartDrawer() {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-            className="fixed right-0 top-0 h-full w-full max-w-md bg-white dark:bg-gray-900 z-50 flex flex-col shadow-2xl"
+            className="fixed right-0 top-0 h-full w-full max-w-md bg-[#161616] border-l border-white/5 z-50 flex flex-col shadow-2xl"
           >
             {/* Header */}
-            <div className="flex items-center justify-between p-5 border-b border-gray-100 dark:border-gray-800">
+            <div className="flex items-center justify-between p-5 border-b border-white/5">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-orange-100 dark:bg-orange-900/30 rounded-xl flex items-center justify-center">
+                <div className="w-10 h-10 bg-orange-500/15 rounded-xl flex items-center justify-center">
                   <ShoppingCart className="w-5 h-5 text-orange-500" />
                 </div>
                 <div>
-                  <h2 className="font-black text-gray-900 dark:text-white text-lg">Tu Pedido</h2>
+                  <h2 className="font-black text-white text-lg">Tu Pedido</h2>
                   <p className="text-xs text-gray-500">{cartCount} {cartCount === 1 ? 'producto' : 'productos'}</p>
                 </div>
               </div>
               <button
                 onClick={closeCart}
-                className="p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-all"
+                className="p-2 rounded-xl hover:bg-white/5 transition-all"
               >
                 <X className="w-5 h-5 text-gray-500" />
               </button>
@@ -69,10 +69,10 @@ export function CartDrawer() {
                     animate={{ opacity: 1, y: 0 }}
                     className="flex flex-col items-center justify-center h-full py-16 text-center"
                   >
-                    <div className="w-20 h-20 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mb-4">
+                    <div className="w-20 h-20 bg-white/5 rounded-full flex items-center justify-center mb-4">
                       <ShoppingCart className="w-10 h-10 text-gray-300" />
                     </div>
-                    <p className="font-bold text-gray-700 dark:text-gray-300 text-lg">Carrito vacío</p>
+                    <p className="font-bold text-gray-300 text-lg">Carrito vacío</p>
                     <p className="text-sm text-gray-400 mt-1">Agrega productos del menú</p>
                     <Link
                       href="/menu"
@@ -90,7 +90,7 @@ export function CartDrawer() {
                       initial={{ opacity: 0, x: 20 }}
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, x: -20, height: 0 }}
-                      className="flex gap-3 bg-gray-50 dark:bg-gray-800 rounded-2xl p-3"
+                      className="flex gap-3 bg-[#1e1e1e] border border-white/5 rounded-2xl p-3"
                     >
                       <img
                         src={item.product.image}
@@ -98,7 +98,7 @@ export function CartDrawer() {
                         className="w-16 h-16 rounded-xl object-cover flex-shrink-0"
                       />
                       <div className="flex-1 min-w-0">
-                        <p className="font-semibold text-gray-900 dark:text-white text-sm truncate">
+                        <p className="font-semibold text-white text-sm truncate">
                           {item.product.name}
                         </p>
                         <p className="text-orange-500 font-bold text-sm mt-0.5">
@@ -108,11 +108,11 @@ export function CartDrawer() {
                           <div className="flex items-center gap-1.5">
                             <button
                               onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
-                              className="w-7 h-7 rounded-lg bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 flex items-center justify-center hover:border-orange-400 transition-all"
+                              className="w-7 h-7 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center hover:border-orange-400/50 transition-all"
                             >
                               <Minus className="w-3 h-3 text-gray-600 dark:text-gray-400" />
                             </button>
-                            <span className="w-6 text-center font-bold text-gray-900 dark:text-white text-sm">
+                            <span className="w-6 text-center font-bold text-white text-sm">
                               {item.quantity}
                             </span>
                             <button
@@ -138,10 +138,10 @@ export function CartDrawer() {
 
             {/* Footer */}
             {items.length > 0 && (
-              <div className="p-5 border-t border-gray-100 dark:border-gray-800 space-y-4">
+              <div className="p-5 border-t border-white/5 space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-gray-600 dark:text-gray-400 font-medium">Subtotal</span>
-                  <span className="font-black text-gray-900 dark:text-white text-xl">
+                  <span className="text-gray-400 font-medium">Subtotal</span>
+                  <span className="font-black text-white text-xl">
                     {formatPrice(cartTotal)}
                   </span>
                 </div>
