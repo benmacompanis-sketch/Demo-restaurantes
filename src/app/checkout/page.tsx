@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { ArrowLeft, MapPin, Package, CheckCircle, Truck, Store } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useCartStore } from '@/context/CartStore';
+import { useOrderStore } from '@/context/OrderStore';
 import { restaurantConfig } from '@/data/config';
 import { formatPrice, generateWhatsAppMessage, openWhatsApp } from '@/lib/utils';
 import { DeliveryZone } from '@/types';
@@ -15,6 +16,7 @@ type DeliveryType = 'delivery' | 'pickup';
 export default function CheckoutPage() {
   const router = useRouter();
   const { items, total, clearCart } = useCartStore();
+  const { addOrder } = useOrderStore();
   const cartTotal = total();
 
   const [deliveryType, setDeliveryType] = useState<DeliveryType>('delivery');
@@ -54,6 +56,19 @@ export default function CheckoutPage() {
       finalTotal,
       notes
     );
+
+    addOrder({
+      id: `ORD-${Date.now()}`,
+      items: [...items],
+      customer: { name, phone, address: address || undefined, notes: notes || undefined },
+      deliveryType,
+      deliveryZone: deliveryType === 'delivery' && selectedZone ? selectedZone : undefined,
+      subtotal: cartTotal,
+      deliveryCost,
+      total: finalTotal,
+      status: 'pending',
+      createdAt: new Date(),
+    });
 
     setSubmitted(true);
     clearCart();
