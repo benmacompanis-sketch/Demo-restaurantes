@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ShoppingCart, Menu, X, Moon, Sun, Search, Phone } from 'lucide-react';
+import { ShoppingCart, Menu, X, Moon, Sun } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCartStore } from '@/context/CartStore';
 import { restaurantConfig } from '@/data/config';
@@ -14,14 +14,14 @@ interface HeaderProps {
 
 export function Header({ darkMode, toggleDarkMode }: HeaderProps) {
   const [scrolled, setScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { count, toggleCart, isOpen } = useCartStore();
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const { count, toggleCart } = useCartStore();
   const cartCount = count();
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const onScroll = () => setScrolled(window.scrollY > 30);
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
   const navLinks = [
@@ -33,34 +33,44 @@ export function Header({ darkMode, toggleDarkMode }: HeaderProps) {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? 'bg-white/95 dark:bg-gray-900/95 backdrop-blur-md shadow-lg'
-          : 'bg-transparent'
-      }`}
+      className="fixed top-0 left-0 right-0 z-50 transition-all duration-500"
+      style={scrolled ? {
+        backgroundColor: 'rgba(10,10,10,0.92)',
+        backdropFilter: 'blur(20px)',
+        WebkitBackdropFilter: 'blur(20px)',
+        borderBottom: '1px solid rgba(255,255,255,0.06)',
+      } : {}}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-8">
         <div className="flex items-center justify-between h-16 sm:h-20">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2">
-            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-orange-500 to-red-600 rounded-xl flex items-center justify-center shadow-lg">
-              <span className="text-white text-xl font-black">B</span>
+          <Link href="/" className="flex items-center gap-3">
+            <div
+              className="w-9 h-9 rounded-xl flex items-center justify-center shadow-lg flex-shrink-0"
+              style={{ background: 'linear-gradient(135deg, #FF6B35 0%, #cc3d0e 100%)' }}
+            >
+              <span className="text-white text-base font-black font-display">B</span>
             </div>
             <div className="hidden sm:block">
-              <p className="font-black text-gray-900 dark:text-white text-lg leading-none">
+              <p className="font-display font-bold text-white text-base leading-none tracking-tight">
                 {restaurantConfig.name}
               </p>
-              <p className="text-orange-500 text-xs font-medium">{restaurantConfig.tagline}</p>
+              <p className="text-[10px] font-medium mt-0.5" style={{ color: 'rgba(255,107,53,0.7)' }}>
+                Premium Restaurant
+              </p>
             </div>
           </Link>
 
-          {/* Desktop Nav */}
+          {/* Desktop nav */}
           <nav className="hidden md:flex items-center gap-1">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-orange-500 dark:hover:text-orange-400 rounded-lg hover:bg-orange-50 dark:hover:bg-orange-950/20 transition-all"
+                className="px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200"
+                style={{ color: 'rgba(255,255,255,0.45)' }}
+                onMouseEnter={(e) => { e.currentTarget.style.color = '#fff'; e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.05)'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.45)'; e.currentTarget.style.backgroundColor = 'transparent'; }}
               >
                 {link.label}
               </Link>
@@ -69,33 +79,30 @@ export function Header({ darkMode, toggleDarkMode }: HeaderProps) {
 
           {/* Actions */}
           <div className="flex items-center gap-2">
-            <a
-              href={`tel:${restaurantConfig.phone}`}
-              className="hidden lg:flex items-center gap-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-orange-500 transition-colors"
-            >
-              <Phone className="w-4 h-4" />
-              <span>{restaurantConfig.phone}</span>
-            </a>
-
             <button
               onClick={toggleDarkMode}
-              className="p-2 rounded-xl text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-all"
+              className="p-2 rounded-lg transition-all duration-200"
+              style={{ color: 'rgba(255,255,255,0.35)' }}
+              onMouseEnter={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.8)'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(255,255,255,0.35)'; }}
             >
-              {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+              {darkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
             </button>
 
-            <Link
-              href="/menu"
-              className="hidden md:flex p-2 rounded-xl text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-all"
-            >
-              <Search className="w-5 h-5" />
-            </Link>
-
-            <button
+            <motion.button
+              whileTap={{ scale: 0.95 }}
               onClick={toggleCart}
-              className="relative p-2.5 bg-orange-500 hover:bg-orange-600 text-white rounded-xl transition-all shadow-lg shadow-orange-500/25 active:scale-95"
+              className="relative flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold transition-all"
+              style={{
+                border: '1px solid rgba(255,107,53,0.4)',
+                color: '#FF6B35',
+                backgroundColor: 'rgba(255,107,53,0.08)',
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,107,53,0.15)'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,107,53,0.08)'; }}
             >
-              <ShoppingCart className="w-5 h-5" />
+              <ShoppingCart className="w-4 h-4" />
+              <span className="hidden sm:inline">Pedido</span>
               <AnimatePresence>
                 {cartCount > 0 && (
                   <motion.span
@@ -103,51 +110,47 @@ export function Header({ darkMode, toggleDarkMode }: HeaderProps) {
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     exit={{ scale: 0 }}
-                    className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-red-500 text-white text-xs font-black rounded-full flex items-center justify-center"
+                    className="w-5 h-5 rounded-full flex items-center justify-center text-xs font-black text-white"
+                    style={{ backgroundColor: '#FF6B35' }}
                   >
                     {cartCount > 9 ? '9+' : cartCount}
                   </motion.span>
                 )}
               </AnimatePresence>
-            </button>
+            </motion.button>
 
             <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 rounded-xl text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all"
+              onClick={() => setMobileOpen(!mobileOpen)}
+              className="md:hidden p-2 rounded-lg transition-all"
+              style={{ color: 'rgba(255,255,255,0.5)' }}
             >
-              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile menu */}
       <AnimatePresence>
-        {mobileMenuOpen && (
+        {mobileOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800"
+            style={{ backgroundColor: '#0f0f0f', borderTop: '1px solid rgba(255,255,255,0.05)' }}
           >
             <div className="px-4 py-4 space-y-1">
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="block px-4 py-3 text-gray-700 dark:text-gray-300 hover:text-orange-500 hover:bg-orange-50 dark:hover:bg-orange-950/20 rounded-xl font-medium transition-all"
+                  onClick={() => setMobileOpen(false)}
+                  className="block px-4 py-3 rounded-xl text-sm font-medium transition-all"
+                  style={{ color: 'rgba(255,255,255,0.6)' }}
                 >
                   {link.label}
                 </Link>
               ))}
-              <a
-                href={`tel:${restaurantConfig.phone}`}
-                className="flex items-center gap-2 px-4 py-3 text-gray-700 dark:text-gray-300 font-medium"
-              >
-                <Phone className="w-4 h-4 text-orange-500" />
-                {restaurantConfig.phone}
-              </a>
             </div>
           </motion.div>
         )}
