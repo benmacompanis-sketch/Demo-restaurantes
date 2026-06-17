@@ -1,17 +1,35 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
-import { featuredProducts } from '@/data/products';
+import { featuredProducts as staticFeatured } from '@/data/products';
 import { ProductCard } from '@/components/menu/ProductCard';
+import { supabase } from '@/lib/supabase';
+import { Product } from '@/types';
 
 export function FeaturedProducts() {
+  const [featured, setFeatured] = useState<Product[]>(staticFeatured);
+
+  useEffect(() => {
+    supabase.from('products').select('*').eq('featured', true).eq('available', true).then(({ data }) => {
+      if (data?.length) {
+        setFeatured(data.map((r) => ({
+          id: r.id, name: r.name, description: r.description ?? '',
+          price: r.price, originalPrice: r.original_price ?? undefined,
+          image: r.image ?? '', categoryId: r.category_id,
+          tags: r.tags ?? [], available: r.available, featured: r.featured ?? false,
+          rating: r.rating ?? undefined, prepTime: r.prep_time ?? undefined,
+        })));
+      }
+    });
+  }, []);
+
   return (
     <section className="section-pad" style={{ background: 'var(--surface-0)' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
 
-        {/* Section header */}
         <motion.div
           initial={{ opacity: 0, y: 18 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -31,9 +49,8 @@ export function FeaturedProducts() {
           </p>
         </motion.div>
 
-        {/* Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {featuredProducts.map((product, i) => (
+          {featured.map((product, i) => (
             <motion.div
               key={product.id}
               initial={{ opacity: 0, y: 20 }}
@@ -46,7 +63,6 @@ export function FeaturedProducts() {
           ))}
         </div>
 
-        {/* CTA */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}

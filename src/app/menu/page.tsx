@@ -1,13 +1,14 @@
 'use client';
 
-import { useState, useMemo, Suspense } from 'react';
+import { useState, useMemo, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Search, Grid, List, SlidersHorizontal, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { products } from '@/data/products';
+import { products as staticProducts } from '@/data/products';
 import { categories } from '@/data/categories';
 import { ProductCard } from '@/components/menu/ProductCard';
-import type { ProductTag } from '@/types';
+import { supabase } from '@/lib/supabase';
+import type { Product, ProductTag } from '@/types';
 
 const tagFilters: { id: ProductTag; label: string }[] = [
   { id: 'popular', label: '🔥 Popular' },
@@ -21,11 +22,26 @@ function MenuContent() {
   const searchParams = useSearchParams();
   const initialCat = searchParams.get('cat') || 'all';
 
+  const [products, setProducts] = useState<Product[]>(staticProducts);
   const [search, setSearch] = useState('');
   const [activeCategory, setActiveCategory] = useState(initialCat);
   const [activeTags, setActiveTags] = useState<ProductTag[]>([]);
   const [layout, setLayout] = useState<'grid' | 'list'>('grid');
   const [showFilters, setShowFilters] = useState(false);
+
+  useEffect(() => {
+    supabase.from('products').select('*').order('category_id').then(({ data }) => {
+      if (data?.length) {
+        setProducts(data.map((r) => ({
+          id: r.id, name: r.name, description: r.description ?? '',
+          price: r.price, originalPrice: r.original_price ?? undefined,
+          image: r.image ?? '', categoryId: r.category_id,
+          tags: r.tags ?? [], available: r.available, featured: r.featured ?? false,
+          rating: r.rating ?? undefined, prepTime: r.prep_time ?? undefined,
+        })));
+      }
+    });
+  }, []);
 
   const toggleTag = (tag: ProductTag) => {
     setActiveTags((prev) =>

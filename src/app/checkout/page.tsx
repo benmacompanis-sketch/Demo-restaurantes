@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { ArrowLeft, MapPin, Package, CheckCircle, Truck, Store } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useCartStore } from '@/context/CartStore';
-import { useOrderStore } from '@/context/OrderStore';
+import { insertOrder } from '@/context/OrderStore';
 import { restaurantConfig } from '@/data/config';
 import { formatPrice, generateWhatsAppMessage, openWhatsApp } from '@/lib/utils';
 import { DeliveryZone } from '@/types';
@@ -16,7 +16,6 @@ type DeliveryType = 'delivery' | 'pickup';
 export default function CheckoutPage() {
   const router = useRouter();
   const { items, total, clearCart } = useCartStore();
-  const { addOrder } = useOrderStore();
   const cartTotal = total();
 
   const [deliveryType, setDeliveryType] = useState<DeliveryType>('delivery');
@@ -42,7 +41,7 @@ export default function CheckoutPage() {
     return errs;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const errs = validate();
     if (Object.keys(errs).length > 0) { setErrors(errs); return; }
 
@@ -57,18 +56,22 @@ export default function CheckoutPage() {
       notes
     );
 
-    addOrder({
-      id: `ORD-${Date.now()}`,
-      items: [...items],
-      customer: { name, phone, address: address || undefined, notes: notes || undefined },
-      deliveryType,
-      deliveryZone: deliveryType === 'delivery' && selectedZone ? selectedZone : undefined,
-      subtotal: cartTotal,
-      deliveryCost,
-      total: finalTotal,
-      status: 'pending',
-      createdAt: new Date(),
-    });
+    try {
+      await insertOrder({
+        id: `ORD-${Date.now()}`,
+        items: [...items],
+        customer: { name, phone, address: address || undefined, notes: notes || undefined },
+        deliveryType,
+        deliveryZone: deliveryType === 'delivery' && selectedZone ? selectedZone : undefined,
+        subtotal: cartTotal,
+        deliveryCost,
+        total: finalTotal,
+        status: 'pending',
+        createdAt: new Date(),
+      });
+    } catch {
+      // Order saved locally even if Supabase fails
+    }
 
     setSubmitted(true);
     clearCart();
